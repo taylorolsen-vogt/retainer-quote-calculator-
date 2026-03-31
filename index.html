@@ -283,15 +283,12 @@
     <div class="options" id="duration">
       <button class="opt active" data-group="duration" data-months="1">
         1 Month
-        <span class="price-hint">Short engagement</span>
       </button>
       <button class="opt" data-group="duration" data-months="3">
         3 Months
-        <span class="price-hint">5% discount</span>
       </button>
       <button class="opt" data-group="duration" data-months="6">
         6 Months
-        <span class="price-hint">10% discount</span>
       </button>
     </div>
   </div>
@@ -302,15 +299,12 @@
     <div class="options" id="meetings">
       <button class="opt active" data-group="meetings" data-meetings="2">
         2× / week
-        <span class="price-hint">~8 hrs / mo</span>
       </button>
       <button class="opt" data-group="meetings" data-meetings="3">
         3× / week
-        <span class="price-hint">~12 hrs / mo</span>
       </button>
       <button class="opt" data-group="meetings" data-meetings="4">
         4× / week
-        <span class="price-hint">~16 hrs / mo</span>
       </button>
     </div>
   </div>
@@ -321,15 +315,12 @@
     <div class="options" id="onboarding">
       <button class="opt active" data-group="onboarding" data-calls="1">
         1 Call
-        <span class="price-hint">$150</span>
       </button>
       <button class="opt" data-group="onboarding" data-calls="2">
         2 Calls
-        <span class="price-hint">$300</span>
       </button>
       <button class="opt" data-group="onboarding" data-calls="3">
         3 Calls
-        <span class="price-hint">$450</span>
       </button>
     </div>
   </div>
@@ -408,7 +399,6 @@
   const RATE = 100;
   const ONBOARDING_RATE = 150;
   const WEEKS_PER_MONTH = 4;
-  const DISCOUNTS = { 1: 0, 3: 0.05, 6: 0.10 };
 
   document.querySelectorAll('.opt').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -439,14 +429,11 @@
     const reportCost = document.getElementById('report').checked ? 350 : 0;
 
     const baseMonthly = meetingCostPerMonth * months;
-    const discount = DISCOUNTS[months];
-    const discountedBase = baseMonthly * (1 - discount);
-    const total = discountedBase + onboardingCost + asyncCost + summaryCost + reportCost;
+    const total = baseMonthly + onboardingCost + asyncCost + summaryCost + reportCost;
 
     // Breakdown
     let lines = [];
     lines.push(`${meetings}× / week · ${hoursPerMonth} hrs / mo · ${fmt(meetingCostPerMonth)} / mo`);
-    if (discount > 0) lines.push(`<span>${months}-month discount — −${(discount*100).toFixed(0)}%</span>`);
     lines.push(`${calls} onboarding call${calls > 1 ? 's' : ''} · ${fmt(onboardingCost)}`);
     if (asyncCost) lines.push(`Async support · ${fmt(asyncCost)}`);
     if (summaryCost) lines.push(`Written summaries · ${fmt(summaryCost)}`);
