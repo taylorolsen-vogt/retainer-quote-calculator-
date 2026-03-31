@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Space+Mono:wght@400;700&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0e0c0b;
+    --surface: #161412;
+    --border: #2a2320;
+    --red: #8b2c1a;
+    --red-light: #c04030;
+    --red-active-bg: #3d1510;
+    --text: #e8e0d8;
+    --muted: #7a6e68;
+    --accent: #c8a882;
+    --gold: #c8a882;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    min-height: 100vh;
+    padding: 0;
+  }
+
+  .header {
+    padding: 28px 40px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .logo-mark {
+    width: 0;
+    height: 0;
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+    border-top: 12px solid var(--red-light);
+    flex-shrink: 0;
+  }
+
+  .logo-text {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  .main {
+    padding: 52px 40px 120px;
+    max-width: 820px;
+  }
+
+  .page-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 56px;
+    font-weight: 300;
+    line-height: 1;
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+
+  .page-title em {
+    font-style: italic;
+    color: var(--muted);
+  }
+
+  .page-sub {
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 52px;
+  }
+
+  .section {
+    margin-bottom: 40px;
+  }
+
+  .section-label {
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .opt {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    letter-spacing: 0.05em;
+    position: relative;
+  }
+
+  .opt:hover {
+    border-color: var(--red-light);
+    color: var(--text);
+  }
+
+  .opt.active {
+    background: var(--red-active-bg);
+    border-color: var(--red);
+    color: var(--text);
+  }
+
+  .opt .price-hint {
+    font-size: 9px;
+    color: var(--muted);
+    display: block;
+    margin-top: 3px;
+    letter-spacing: 0.05em;
+  }
+
+  .opt.active .price-hint {
+    color: var(--accent);
+  }
+
+  /* Divider */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 40px 0;
+  }
+
+  /* Add-ons */
+  .addon-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .addon-row:first-child {
+    border-top: 1px solid var(--border);
+  }
+
+  .addon-info { flex: 1; }
+
+  .addon-name {
+    font-size: 12px;
+    color: var(--text);
+    margin-bottom: 3px;
+    letter-spacing: 0.05em;
+  }
+
+  .addon-desc {
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .addon-right {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .addon-price {
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+  }
+
+  /* Toggle */
+  .toggle {
+    position: relative;
+    width: 40px;
+    height: 22px;
+    cursor: pointer;
+  }
+
+  .toggle input { display: none; }
+
+  .toggle-track {
+    position: absolute;
+    inset: 0;
+    background: #2a2320;
+    border-radius: 11px;
+    transition: background 0.2s;
+  }
+
+  .toggle input:checked ~ .toggle-track {
+    background: var(--red);
+  }
+
+  .toggle-thumb {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 16px;
+    height: 16px;
+    background: var(--muted);
+    border-radius: 50%;
+    transition: transform 0.2s, background 0.2s;
+  }
+
+  .toggle input:checked ~ .toggle-thumb {
+    transform: translateX(18px);
+    background: var(--text);
+  }
+
+  /* Sticky footer */
+  .footer-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #0a0908;
+    border-top: 1px solid var(--border);
+    padding: 16px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .footer-breakdown {
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    line-height: 1.8;
+  }
+
+  .footer-breakdown span {
+    color: var(--red-light);
+  }
+
+  .footer-total {
+    text-align: right;
+  }
+
+  .total-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 48px;
+    font-weight: 300;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  .total-sub {
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 0.2em;
+    margin-top: 2px;
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo-mark"></div>
+  <span class="logo-text">Redstone Laboratories</span>
+</div>
+
+<div class="main">
+  <h1 class="page-title">Retainer <em>Calculator</em></h1>
+  <p class="page-sub">Short-Term Advisory Retainer</p>
+
+  <!-- Duration -->
+  <div class="section">
+    <div class="section-label">Duration</div>
+    <div class="options" id="duration">
+      <button class="opt active" data-group="duration" data-months="1">
+        1 Month
+        <span class="price-hint">Short engagement</span>
+      </button>
+      <button class="opt" data-group="duration" data-months="3">
+        3 Months
+        <span class="price-hint">5% discount</span>
+      </button>
+      <button class="opt" data-group="duration" data-months="6">
+        6 Months
+        <span class="price-hint">10% discount</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Meeting cadence -->
+  <div class="section">
+    <div class="section-label">Weekly Meetings</div>
+    <div class="options" id="meetings">
+      <button class="opt active" data-group="meetings" data-meetings="2">
+        2× / week
+        <span class="price-hint">~8 hrs / mo</span>
+      </button>
+      <button class="opt" data-group="meetings" data-meetings="3">
+        3× / week
+        <span class="price-hint">~12 hrs / mo</span>
+      </button>
+      <button class="opt" data-group="meetings" data-meetings="4">
+        4× / week
+        <span class="price-hint">~16 hrs / mo</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Onboarding calls -->
+  <div class="section">
+    <div class="section-label">Onboarding Calls</div>
+    <div class="options" id="onboarding">
+      <button class="opt active" data-group="onboarding" data-calls="1">
+        1 Call
+        <span class="price-hint">$150</span>
+      </button>
+      <button class="opt" data-group="onboarding" data-calls="2">
+        2 Calls
+        <span class="price-hint">$300</span>
+      </button>
+      <button class="opt" data-group="onboarding" data-calls="3">
+        3 Calls
+        <span class="price-hint">$450</span>
+      </button>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- Add-ons -->
+  <div class="section">
+    <div class="section-label">Add-Ons</div>
+
+    <div class="addon-row">
+      <div class="addon-info">
+        <div class="addon-name">Async Support</div>
+        <div class="addon-desc">Slack / email between sessions</div>
+      </div>
+      <div class="addon-right">
+        <span class="addon-price">+$200 / mo</span>
+        <label class="toggle">
+          <input type="checkbox" id="async" onchange="calc()">
+          <div class="toggle-track"></div>
+          <div class="toggle-thumb"></div>
+        </label>
+      </div>
+    </div>
+
+    <div class="addon-row">
+      <div class="addon-info">
+        <div class="addon-name">Written Summaries</div>
+        <div class="addon-desc">Notes + action items after each session</div>
+      </div>
+      <div class="addon-right">
+        <span class="addon-price">+$100 / mo</span>
+        <label class="toggle">
+          <input type="checkbox" id="summaries" onchange="calc()">
+          <div class="toggle-track"></div>
+          <div class="toggle-thumb"></div>
+        </label>
+      </div>
+    </div>
+
+    <div class="addon-row">
+      <div class="addon-info">
+        <div class="addon-name">Final Report</div>
+        <div class="addon-desc">Structured deliverable at engagement close</div>
+      </div>
+      <div class="addon-right">
+        <span class="addon-price">+$350 flat</span>
+        <label class="toggle">
+          <input type="checkbox" id="report" onchange="calc()">
+          <div class="toggle-track"></div>
+          <div class="toggle-thumb"></div>
+        </label>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Sticky footer -->
+<div class="footer-bar">
+  <div class="footer-breakdown" id="breakdown">
+    —
+  </div>
+  <div class="footer-total">
+    <div class="total-price" id="total">$—</div>
+    <div class="total-sub" id="total-sub">Total</div>
+  </div>
+</div>
+
+<script>
+  const state = {
+    months: 1,
+    meetings: 2,
+    calls: 1,
+  };
+
+  const RATE = 100;
+  const ONBOARDING_RATE = 150;
+  const WEEKS_PER_MONTH = 4;
+  const DISCOUNTS = { 1: 0, 3: 0.05, 6: 0.10 };
+
+  document.querySelectorAll('.opt').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const group = btn.dataset.group;
+      document.querySelectorAll(`.opt[data-group="${group}"]`).forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      if (group === 'duration') state.months = +btn.dataset.months;
+      if (group === 'meetings') state.meetings = +btn.dataset.meetings;
+      if (group === 'onboarding') state.calls = +btn.dataset.calls;
+
+      calc();
+    });
+  });
+
+  function fmt(n) {
+    return '$' + n.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+  }
+
+  function calc() {
+    const { months, meetings, calls } = state;
+
+    const hoursPerMonth = meetings * WEEKS_PER_MONTH;
+    const meetingCostPerMonth = hoursPerMonth * RATE;
+    const onboardingCost = calls * ONBOARDING_RATE;
+    const asyncCost = document.getElementById('async').checked ? 200 * months : 0;
+    const summaryCost = document.getElementById('summaries').checked ? 100 * months : 0;
+    const reportCost = document.getElementById('report').checked ? 350 : 0;
+
+    const baseMonthly = meetingCostPerMonth * months;
+    const discount = DISCOUNTS[months];
+    const discountedBase = baseMonthly * (1 - discount);
+    const total = discountedBase + onboardingCost + asyncCost + summaryCost + reportCost;
+
+    // Breakdown
+    let lines = [];
+    lines.push(`${meetings}× / week · ${hoursPerMonth} hrs / mo · ${fmt(meetingCostPerMonth)} / mo`);
+    if (discount > 0) lines.push(`<span>${months}-month discount — −${(discount*100).toFixed(0)}%</span>`);
+    lines.push(`${calls} onboarding call${calls > 1 ? 's' : ''} · ${fmt(onboardingCost)}`);
+    if (asyncCost) lines.push(`Async support · ${fmt(asyncCost)}`);
+    if (summaryCost) lines.push(`Written summaries · ${fmt(summaryCost)}`);
+    if (reportCost) lines.push(`Final report · ${fmt(reportCost)}`);
+
+    document.getElementById('breakdown').innerHTML = lines.join('<br>');
+    document.getElementById('total').textContent = fmt(total);
+    document.getElementById('total-sub').textContent = `${months}-month total`;
+  }
+
+  calc();
+</script>
+</body>
+</html>
